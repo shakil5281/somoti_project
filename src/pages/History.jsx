@@ -7,9 +7,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Account from '../account/Account';
-import UpdateAcc from '../update/UpdateAcc';
-import Trash from '../trash/Trash';
+import Account from './Account';
+import UpdateAcc from './UpdateAcc';
+import Trash from './Trash';
 
 
 function TabPanel(props) {

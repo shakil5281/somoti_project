@@ -1,5 +1,17 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family: 'Public Sans', sans-serif !important;
+}
+
+
+
 .css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root.Mui-selected{
-    background-color: rgba(154, 154, 157, 0.1) !important;
-    border-left: 3px solid blue;
+    background-color:rgba(154, 154, 157, 0.28) !important;
+    border-left: 5px solid blue;
     transition: 250ms;
+}
+
+td{
+    border: 'none' !important;
 }

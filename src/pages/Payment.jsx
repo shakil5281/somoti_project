@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { columns, rows } from '../../navLinks/payment';
+import { columns, rows } from '../components/navLinks/payment';
 import { Button } from '@mui/material';
 
 

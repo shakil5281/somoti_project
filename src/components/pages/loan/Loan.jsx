@@ -1,167 +1,233 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
-import TablePagination from '@mui/material/TablePagination';
+import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { loan } from '../../navLinks/loan';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import { Button, TextField } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
+import { useSnackbar } from 'notistack'
+import { useNavigate } from 'react-router-dom'
 
-function TablePaginationActions(props) {
-  const theme = useTheme();
-  const { count, page, rowsPerPage, onPageChange } = props;
 
-  const handleFirstPageButtonClick = (event) => {
-    onPageChange(event, 0);
-  };
 
-  const handleBackButtonClick = (event) => {
-    onPageChange(event, page - 1);
-  };
 
-  const handleNextButtonClick = (event) => {
-    onPageChange(event, page + 1);
-  };
+function Row(props) {
 
-  const handleLastPageButtonClick = (event) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
+  const { row } = props;
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </Box>
+    <React.Fragment>
+      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          {row.user.name}
+        </TableCell>
+        <TableCell align="center">{row.user.sl}</TableCell>
+        <TableCell align="center">{row.date}</TableCell>
+        <TableCell align="center">00</TableCell>
+        <TableCell align="center">00</TableCell>
+        <TableCell align="center">{row.amount}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Box component={'div'} sx={{ margin: 1 }} className='bg-blue-100 p-2 text-blue-800'>
+              <Box component={'div'} className='flex justify-between items-center'>
+                <Typography variant="h6" gutterBottom component="div">
+                  History
+                </Typography>
+                <IconButton>
+                  <FilterAltIcon />
+                </IconButton>
+              </Box>
+              <Table size="small" aria-label="purchases">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Date</TableCell>
+                    <TableCell align="right">Month</TableCell>
+                    <TableCell align="right">Payment</TableCell>
+                    <TableCell align="right">Less</TableCell>
+                    <TableCell align="right">Loan</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/* {
+                    Array.from(row.history).map((item, i) => (
+                      <TableRow key={i.toString()}>
+                        <TableCell component="th" scope="row">{item.date}</TableCell>
+                        <TableCell align="right">{item.month}</TableCell>
+                        <TableCell align="right">{item.payment}</TableCell>
+                        <TableCell align="right">{item.less}</TableCell>
+                        <TableCell align="right">{item.loan}</TableCell>
+                      </TableRow>
+                    ))
+                  } */}
+                </TableBody>
+              </Table>
+            </Box>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </React.Fragment>
   );
 }
 
-TablePaginationActions.propTypes = {
-  count: PropTypes.number.isRequired,
-  onPageChange: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired,
-};
 
-function createData(name, calories, fat) {
-  return { name, calories, fat };
+export default function Loan() {
+  const navigate = useNavigate()
+  
+  const { enqueueSnackbar } = useSnackbar();
+  const [inputvalue, setinputvalue] = React.useState('')
+  const [find, setfind] = React.useState('')
+  const [loanList, setloanList] = React.useState({})
+
+
+  const LoanList = async() =>{
+    try{
+      const data = await axios.get('/UserLoanList');
+      setloanList(data.data.data)
+    }catch(err){
+      console.log(err)
+    }
+  }
+
+  React.useEffect(()=>{
+    LoanList()
+  },[])
+
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setinputvalue(values => ({...values, [name]: value}))
+  }
+
+
+ const  LoaninputSubmitList =async() =>{
+  try{
+    const data = await axios.post('userloan', inputvalue)
+    enqueueSnackbar('Loan Success', {variant: 'success'} );
+    setinputvalue('')
+    navigate(0)
+  }catch(err){
+    enqueueSnackbar(err.response.data.message, {variant: 'error'} );
+    navigate('')
+  }
+ }
+
+
+  const hendleSubmit = (event) =>{
+    event.preventDefault()
+    LoaninputSubmitList()
+  }
+
+
+
+
+const UserDataSearch = async() =>{
+  try{
+    
+    const data = await axios.post('/UserLoanName',{id: find})
+    setinputvalue(data.data.data)
+
+
+  }catch(err){
+    console.log('err')
+    enqueueSnackbar(err.response.data.message, {variant: 'error'} );
+  }
 }
 
-const rows = [
-  createData('Cupcake', 305, 3.7),
-  createData('Donut', 452, 25.0),
-  createData('Eclair', 262, 16.0),
-  createData('Frozen yoghurt', 159, 6.0),
-  createData('Gingerbread', 356, 16.0),
-  createData('Honeycomb', 408, 3.2),
-  createData('Ice cream sandwich', 237, 9.0),
-  createData('Jelly Bean', 375, 0.0),
-  createData('KitKat', 518, 26.0),
-  createData('Lollipop', 392, 0.2),
-  createData('Marshmallow', 318, 0),
-  createData('Nougat', 360, 19.0),
-  createData('Oreo', 437, 18.0),
-].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
-export default function CustomPaginationActionsTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+const hendleSearch = (e) =>{
+  e.preventDefault();
+  UserDataSearch()
+}
+  
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-        <TableBody>
-          {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {row.calories}
-              </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {row.fat}
-              </TableCell>
+    <>
+      <Box component={'div'} className='my-8'>
+        <Paper variant="outlined"
+          sx={{ padding: 3 }}
+        >
+          <Box>
+            <Typography variant='h5' sx={{ padding: 1 }}>Loan</Typography>
+            <Box component={'form'} onSubmit= {hendleSubmit}>
+              <TextField
+              onChange={(e)=>setfind(e.target.value)}
+              variant='outlined' size='small' sx={{ width: 80 }} label='id' />
+              <Button onClick={hendleSearch}><SearchIcon /></Button>
+              <TextField
+                id="outlined-name"
+                onChange={handleChange}
+               value={inputvalue._id}
+               name= '_id'
+               focused 
+              variant='standard' size='medium' sx={{ width: 200, margin: '0 10px', display: 'none' }} label='_id' />
+              <TextField
+                id="outlined-name"
+                onChange={handleChange}
+               value={inputvalue.name}
+               name= 'name'
+               focused 
+              variant='standard' size='medium' sx={{ width: 200, margin: '0 10px' }} label='Name' />
+              <TextField
+              id="outlined-name"
+              onChange={handleChange}
+               value={inputvalue.designation}
+               name= 'designation'
+               focused 
+              variant='standard' size='medium' sx={{ width: 200, margin: '0 10px' }} label='Designation' />
+              <TextField 
+              id="outlined-name"
+              onChange={handleChange}
+              name= 'amount'
+              variant='standard' size='medium' sx={{ width: 200, margin: '0 10px' }} label='Amount' />
+              <Button variant='contained' color='secondary' type='submit'>Submit</Button>
+            </Box>
+          </Box>
+        </Paper>
+      </Box>
+      <TableContainer component={Paper}>
+        <Table aria-label="collapsible table">
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>Name</TableCell>
+              <TableCell align="center">Id</TableCell>
+              <TableCell align="center">Date</TableCell>
+              <TableCell align="center">Total Payment</TableCell>
+              <TableCell align="center">Total Less</TableCell>
+              <TableCell align="center">Total Loan</TableCell>
             </TableRow>
-          ))}
-
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-              colSpan={3}
-              count={rows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              SelectProps={{
-                inputProps: {
-                  'aria-label': 'rows per page',
-                },
-                native: true,
-              }}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              ActionsComponent={TablePaginationActions}
-            />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {Array.from(loanList).map((row) => (
+              <Row key={row.name} row={row} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }

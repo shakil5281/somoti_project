@@ -8,5 +8,7 @@ export {default as Account} from './pages/account/Account'
 export {default as Payment} from './pages/payment/Payment'
 export {default as Trash} from './pages/trash/Trash'
 export {default as UpdateAcc} from './pages/update/UpdateAcc'
+export {default as Emi} from './pages/emi/Emi'
+export {default as Manpower} from './pages/manpower/Manpower'
 
 

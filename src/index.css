@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+.css-1nxmd3h-MuiListItem-root.Mui-selected{
+    background-color: rgb(96, 96, 252) !important;
+    color: #fff
+}

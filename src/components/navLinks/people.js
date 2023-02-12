@@ -10,7 +10,7 @@ export const people = [
         totalAmount: 45000,
         history : [
           {
-            date: '20-11-2022',
+            date: '01-01-2022',
             month: 'january',
             interest: 1400,
             loan: 5000,
@@ -18,12 +18,12 @@ export const people = [
             totalAmount: 45000,
           },
           {
-            date: '20-11-2023',
-            month: 'january',
-            interest: 1400,
-            loan: 5000,
-            deposit: 16000,
-            totalAmount: 45000,
+            date: '01-02-2022',
+            month: 'February',
+            interest: 700,
+            loan: 2500,
+            deposit: 4000,
+            totalAmount: 55000,
           },
         ]
 
@@ -36,14 +36,24 @@ export const people = [
         loan: 5000,
         deposit: 8000,
         totalAmount: 25000,
-        history : {
-          date: '22-11-2022',
-          month: 'january',
-          interest: 1400,
-          loan: 5000,
-          deposit: 16000,
-          totalAmount: 45000,
-        },
+        history : [
+          {
+            date: '01-01-2022',
+            month: 'january',
+            interest: 1400,
+            loan: 5000,
+            deposit: 16000,
+            totalAmount: 45000,
+          },
+          {
+            date: '01-02-2022',
+            month: 'February',
+            interest: 700,
+            loan: 2500,
+            deposit: 4000,
+            totalAmount: 55000,
+          },
+        ]
     },
     {
         sl: 3,
@@ -53,14 +63,24 @@ export const people = [
         loan: 5000,
         deposit: 70000,
         totalAmount: 176000,
-        history : {
-          date: '23-11-2022',
-          month: 'january',
-          interest: 1400,
-          loan: 5000,
-          deposit: 16000,
-          totalAmount: 45000,
-        },
+        history : [
+          {
+            date: '01-01-2022',
+            month: 'january',
+            interest: 1400,
+            loan: 5000,
+            deposit: 16000,
+            totalAmount: 45000,
+          },
+          {
+            date: '01-02-2022',
+            month: 'February',
+            interest: 700,
+            loan: 2500,
+            deposit: 4000,
+            totalAmount: 55000,
+          },
+        ]
     },
 ]
 

@@ -7,6 +7,8 @@ import HistoryIcon from '@mui/icons-material/History';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import Groups3Icon from '@mui/icons-material/Groups3';
 
 export const MainSummary = [
     {
@@ -16,7 +18,7 @@ export const MainSummary = [
     },
     {
         id: '/parson',
-        title: 'Parson',
+        title: 'Person',
         icon: <Person4Icon/>
     },
     {
@@ -30,30 +32,18 @@ export const MainSummary = [
         icon: <AccountBalanceIcon/>
     },
     {
+        id: '/emi',
+        title: 'EMI',
+        icon: <DateRangeIcon/>
+    },
+    {
         id: '/interest',
         title: 'Interest',
         icon: <AttachMoneyIcon/>
     },
     {
         id: 'history',
-        title: 'History',
+        title: 'Account',
         icon: <HistoryIcon/>
-    },
-]
-export const navLink = [
-    {
-        id: 'account',
-        title: 'New Account',
-        icon: <PersonAddIcon/>
-    },
-    {
-        id: 'update',
-        title: 'Update Account',
-        icon: <ManageAccountsIcon/>
-    },
-    {
-        id: '/trash',
-        title: 'Trash',
-        icon: <DeleteIcon />
     },
 ]

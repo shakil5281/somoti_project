@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from '../App'
-import { Account, History, Home, Interest, Loan, Parson, Payment, Trash, UpdateAcc } from "../components";
+import { Account, Emi, History, Home, Interest, Loan, Manpower, Parson, Payment, Trash, UpdateAcc } from "../components";
 
 
 export const router  = createBrowserRouter([
@@ -43,6 +43,14 @@ export const router  = createBrowserRouter([
             {
                 path: '/update',
                 element: <UpdateAcc />
+            },
+            {
+                path: '/emi',
+                element: <Emi />
+            },
+            {
+                path: '/manpower',
+                element: <Manpower />
             },
         ]
     }

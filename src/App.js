@@ -1,10 +1,12 @@
-import React from 'react'
-import { Navber } from './components'
+import React, { Suspense } from 'react'
+const Layout = React.lazy(()=> import('./components/layout/'))
 
 const App = () => {
   return (
    <>
-    <Navber />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Layout />
+      </Suspense>
    </>
   )
 }

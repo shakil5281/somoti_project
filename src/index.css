@@ -1,8 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.css-1nxmd3h-MuiListItem-root.Mui-selected{
-    background-color: rgb(96, 96, 252) !important;
-    color: #fff
+.css-16ac5r2-MuiButtonBase-root-MuiListItemButton-root.Mui-selected{
+    background-color: rgba(154, 154, 157, 0.1) !important;
+    border-left: 3px solid blue;
+    transition: 250ms;
 }
